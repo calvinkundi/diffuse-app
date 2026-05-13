@@ -22,17 +22,17 @@
 <p class="subtitle">Diffuse — Your companion for overwhelming moments</p>
 
 <div class="updated">
-  Last updated: April 2026 · Previous version: February 2026
+  Last updated: May 2026 · Previous versions: April 2026, February 2026
 </div>
 
 <h2>The Simple Version</h2>
 <p>Your privacy matters — especially in a mental health app. Here's the short version:</p>
 <ul>
   <li><strong>Most of your data stays on your device</strong> and never leaves it</li>
-  <li><strong>AI features are opt-in</strong> — if you enable them and request a reflection, your writing is sent to an AI service for processing, then immediately discarded</li>
+  <li><strong>AI features are opt-in</strong> — if you enable them and request a reflection, your writing is sent to an AI service for processing</li>
   <li><strong>Voice-to-text</strong> — if you use the microphone to dictate instead of type, your voice is processed by your device's built-in speech recognition service (Apple or Google)</li>
   <li><strong>Crash reports</strong> are collected automatically so we can fix bugs, but they contain no personal content</li>
-  <li><strong>We don't have accounts, ads, or tracking</strong></li>
+  <li><strong>We don't have accounts, and we don't use behavioural tracking, advertising, or analytics</strong></li>
 </ul>
 <p>The rest of this page explains each part in detail.</p>
 
@@ -61,18 +61,26 @@
   <li>Your data is sent from your device to a Firebase Cloud Function hosted on Google Cloud</li>
   <li>The Cloud Function forwards it to Anthropic's Claude AI for processing</li>
   <li>The AI response is returned to your device</li>
-  <li>Your data is <strong>not stored</strong> at any point in this chain — it is processed and immediately discarded</li>
 </ol>
+<p>Diffuse itself does not retain your data after the response is delivered. The third-party processors involved — Google Cloud and Anthropic — may briefly retain inputs for operational reliability and abuse prevention as described in their privacy policies. Anthropic's standard policy retains API inputs for up to 30 days for trust and safety review; we do not currently have a zero-retention arrangement in place. Neither provider uses your inputs to train their models. Your data is not associated with you or any account, because Diffuse does not use accounts.</p>
+<p>When your device sends data to the Cloud Function, your IP address is incidentally visible to Google Cloud's request logs as part of standard internet routing, and is retained briefly under Google's default logging policies. Diffuse does not link your IP address to your activity within the app or to any other data we hold.</p>
 
-<h3>What is sent for reflections and reframe questions</h3>
+<h3>What is sent for brain dump reflections</h3>
 <ul>
-  <li>Your brain dump text (up to 2,000 characters for reflections, 1,500 for reframing)</li>
+  <li>Your brain dump text (up to 2,000 characters)</li>
   <li>The emotional tone detected from your writing (e.g. "anxious", "sad")</li>
-  <li>Keywords extracted from your writing</li>
   <li>The emotional arc of your writing session (how your emotions shifted as you wrote)</li>
   <li>Emotionally significant phrases from your writing</li>
   <li>Word count and writing duration</li>
   <li>Whether the entry was written late at night</li>
+</ul>
+
+<h3>What is sent for reframe questions</h3>
+<ul>
+  <li>Your brain dump text (up to 1,500 characters)</li>
+  <li>The emotional tone detected from your writing</li>
+  <li>Emotionally significant phrases from your writing</li>
+  <li>Keywords extracted from your writing</li>
 </ul>
 
 <h3>What is sent for pattern insights</h3>
@@ -89,6 +97,14 @@
   <li>Your device identifiers</li>
   <li>Your saved journal history — only the current session's data, and only when you explicitly request it</li>
 </ul>
+
+<h3>Crisis content</h3>
+<p>If your writing contains language indicating a mental health crisis or self-harm — for example, phrases referring to suicide, self-harm, or hopelessness — Diffuse detects this locally on your device and:</p>
+<ul>
+  <li>Displays crisis support resources for your country</li>
+  <li><strong>Does not send the content to the AI</strong> for reflection or reframing, even if AI features are enabled</li>
+</ul>
+<p>This detection runs entirely on your device. No additional data is collected or transmitted as a result.</p>
 
 <h3>If you don't enable AI features</h3>
 <p>If you leave AI features disabled (the default), no writing or emotional data ever leaves your device. The app works fully without AI features.</p>
@@ -119,7 +135,9 @@
   <li>Your name, email, or any personal information</li>
   <li>The content you were viewing when the crash occurred</li>
 </ul>
-<p>Crash reports are processed by Google Firebase. You can review <a href="https://firebase.google.com/support/privacy">Firebase's privacy information</a> for details.</p>
+
+<h3>How long crash reports are kept</h3>
+<p>Firebase Crashlytics retains crash report data for approximately 90 days, after which it is automatically deleted. You can review <a href="https://firebase.google.com/support/privacy">Firebase's privacy information</a> for details.</p>
 
 <h2>Sharing and Exporting Your Data</h2>
 <p>Diffuse allows you to export and share your journal entries:</p>
@@ -148,7 +166,7 @@
 <p>Diffuse uses the following third-party services:</p>
 <ul>
   <li><strong>Firebase Crashlytics</strong> (Google) — for crash reporting. <a href="https://firebase.google.com/support/privacy">Privacy info</a></li>
-  <li><strong>Firebase Cloud Functions</strong> (Google) — as a secure relay for AI feature requests. Data passes through but is not stored. <a href="https://cloud.google.com/terms/cloud-privacy-notice">Privacy info</a></li>
+  <li><strong>Firebase Cloud Functions</strong> (Google) — as a secure relay for AI feature requests. Data passes through but is not stored by Diffuse. <a href="https://cloud.google.com/terms/cloud-privacy-notice">Privacy info</a></li>
   <li><strong>Anthropic Claude API</strong> — for AI-powered reflections, reframing, and pattern insights (opt-in only). Anthropic's API usage policy states that API inputs are not used to train models. <a href="https://www.anthropic.com/privacy">Privacy info</a></li>
   <li><strong>Apple Speech Recognition / Google Speech Recognition</strong> — for voice-to-text dictation in the brain dump feature (user-initiated only). See <a href="https://www.apple.com/legal/privacy/">Apple</a> or <a href="https://policies.google.com/privacy">Google</a> privacy policies</li>
 </ul>
@@ -160,11 +178,11 @@
   <li><strong>Flutter Secure Storage</strong> (encrypted) — for sensitive data like journal entries</li>
   <li><strong>Shared Preferences</strong> — for app settings and non-sensitive preferences</li>
 </ul>
-<p>Data sent to the AI service is transmitted over HTTPS (encrypted in transit) and passes through Google Cloud and Anthropic's servers for processing only. It is not stored on any server after processing.</p>
+<p>Data sent to the AI service is transmitted over HTTPS (encrypted in transit) and passes through Google Cloud and Anthropic's servers for processing. Diffuse does not retain this data on its own servers after processing; retention by the underlying providers is governed by their respective policies, linked above.</p>
 <p>You can delete all locally stored data at any time through the app's Settings page using "Clear Progress" or "Clear All Data". Uninstalling the app will also remove all local data.</p>
 
 <h2>Children's Privacy</h2>
-<p>Diffuse is not directed at children under the age of 13. We do not knowingly collect personal information from children.</p>
+<p>Diffuse is not directed at children under the age of 16. We do not knowingly collect personal information from anyone under 16. If you believe a child under 16 has used the app, please contact us at the email address below and we will take appropriate action.</p>
 
 <h2>Mental Health Disclaimer</h2>
 <p>Diffuse is a wellness tool designed to help manage everyday stress and anxiety. It is not a medical device, does not provide medical advice, diagnosis, or treatment, and is not a substitute for professional mental health care.</p>
@@ -174,7 +192,22 @@
 <h2>International Users</h2>
 <p>Diffuse is available worldwide. If you enable AI features, your data may be processed on servers located outside your country. The Firebase Cloud Function and Anthropic's AI servers are primarily located in the United States. By enabling AI features, you consent to this transfer. If you do not enable AI features, no personal data leaves your device (except crash reports, which are processed by Google).</p>
 
-<h2>Your Rights</h2>
+<h2>Rights for EU, UK, and EEA Users</h2>
+<p>If you are located in the European Union, United Kingdom, or European Economic Area, you have specific rights under the GDPR (and UK GDPR):</p>
+<ul>
+  <li><strong>Right of access</strong> — to know what personal data is processed about you</li>
+  <li><strong>Right to rectification</strong> — to correct inaccurate data</li>
+  <li><strong>Right to erasure</strong> ("right to be forgotten") — to have your data deleted</li>
+  <li><strong>Right to restrict processing</strong> — to limit how your data is used</li>
+  <li><strong>Right to data portability</strong> — to receive your data in a portable format</li>
+  <li><strong>Right to object</strong> — to object to processing based on legitimate interests</li>
+  <li><strong>Right to lodge a complaint</strong> with your national data protection authority</li>
+</ul>
+<p><strong>Legal basis for processing.</strong> AI feature processing is based on your explicit consent (Article 6(1)(a) GDPR), which you can withdraw at any time by disabling AI features in Settings. Crash report processing is based on our legitimate interest in maintaining a stable, working app (Article 6(1)(f) GDPR). Voice-to-text processing is initiated by your action and handled by your device's operating system; the legal basis (and data controller) for that processing is Apple or Google, as applicable.</p>
+<p><strong>Special category data.</strong> When you use AI features, the content you share may include information about your mental and emotional state, which qualifies as "data concerning health" under Article 9 of the GDPR. Processing of such special-category data requires explicit consent in addition to the standard legal basis. Enabling AI features in Settings constitutes your explicit consent under Article 9(2)(a) GDPR. You can withdraw it at any time by disabling AI features, after which no further special-category data will be sent.</p>
+<p>Because Diffuse stores almost all data locally on your device and does not collect personal identifiers, exercising most of these rights amounts to using "Clear All Data" in Settings or uninstalling the app. For questions about data processed by third-party services, contact us at the email below.</p>
+
+<h2>Your Rights (General)</h2>
 <p>Because Diffuse stores almost all data locally on your device, you have direct control over it:</p>
 <ul>
   <li><strong>Access:</strong> Your data is visible to you within the app at all times</li>
@@ -190,8 +223,8 @@
 <h2>Contact</h2>
 <p>If you have questions about this privacy policy, please contact:</p>
 <p><a href="mailto:diffuseapp1@gmail.com">diffuseapp1@gmail.com</a></p>
-<p>Diffuse is developed by Calvin as an independent project.</p>
-<p><strong>Effective date: April 2026</strong></p>
+<p>The data controller for personal information processed by Diffuse is Calvin, operating independently from Australia. For any GDPR-related requests, please use the email above.</p>
+<p><strong>Effective date: May 2026</strong></p>
 
 </body>
 </html>
